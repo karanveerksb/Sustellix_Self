@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Waste Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .chart-container { width: 80%; margin: 20px auto; }
+    </style>
+</head>
+<body>
+    <h1>Hostel Waste Analysis Dashboard</h1>
+    
+    <div class="chart-container">
+        <canvas id="wasteChart"></canvas>
+    </div>
+    
+    <div class="chart-container">
+        <canvas id="perCapitaChart"></canvas>
+    </div>
+    
+    <script>
+    // Fetch data from our API endpoint
+    fetch('/api/predictions/')
+        .then(response => response.json())
+        .then(data => {
+            // Process the data and create charts
+            const hostels = Object.keys(data);
+            const totalWaste = hostels.map(h => data[h].total);
+            const perCapitaWaste = hostels.map(h => data[h].per_capita);
+            
+            // Create total waste chart
+            new Chart(document.getElementById('wasteChart'), {
+                type: 'bar',
+                data: {
+                    labels: hostels,
+                    datasets: [{
+                        label: 'Total Waste (kg)',
+                        data: totalWaste,
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Total Waste by Hostel'
+                        }
+                    }
+                }
+            });
+            
+            // Create per capita chart
+            new Chart(document.getElementById('perCapitaChart'), {
+                type: 'bar',
+                data: {
+                    labels: hostels,
+                    datasets: [{
+                        label: 'Per Capita Waste (kg/student)',
+                        data: perCapitaWaste,
+                        backgroundColor: 'rgba(153, 102, 255, 0.6)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Per Capita Waste by Hostel'
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
