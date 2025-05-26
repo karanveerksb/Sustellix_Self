@@ -8,6 +8,7 @@ import xgboost as xgb
 from datetime import datetime, timedelta
 import os
 from sklearn.preprocessing import OneHotEncoder
+import random
 
 # Set page configuration
 st.set_page_config(
